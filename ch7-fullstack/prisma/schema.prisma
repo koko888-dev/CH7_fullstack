@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model menu {
+  menu_id        Int                 @id @default(autoincrement())
+  name           String              @db.VarChar(100)
+  price          Int
+  is_bast_seller menu_is_bast_seller
+  type_id        Int
+  type           type                @relation(fields: [type_id], references: [type_id], onUpdate: Restrict, map: "type1")
+
+  @@index([type_id], map: "type1")
+}
+
+model type {
+  type_id Int    @id @default(autoincrement())
+  name    String @db.VarChar(100)
+  menu    menu[]
+}
+
+enum menu_is_bast_seller {
+  yes
+  no
+  EMPTY_ENUM_VALUE @map("")
+}
